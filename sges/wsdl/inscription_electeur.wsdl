@@ -1,0 +1,242 @@
+<?xml version="1.0"?>
+ 
+<definitions
+   xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+   xmlns="http://schemas.xmlsoap.org/wsdl/"
+   
+   targetNamespace="urn:serviceInscriptionElecteurwsdl"
+   xmlns:tns="urn:serviceInscriptionElecteurwsdl"
+      
+>
+    <types>
+        <xsd:schema targetNamespace="urn:serviceInscriptionElecteurwsdl"/>
+        <xsd:schema namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <xsd:import namespace="http://schemas.xmlsoap.org/wsdl"/>
+     
+        <xsd:complexType name="Compte">
+            <xsd:all>
+                <xsd:element name="login" type="xsd:string"/>
+                <xsd:element name="password" type="xsd:string"/>
+                <xsd:element name="num_cni" type="xsd:string"/>
+            </xsd:all>
+        </xsd:complexType>  
+
+        <xsd:complexType name="Electeur">
+            <xsd:all>
+                <xsd:element name="num_cni" type="xsd:string"/>
+                <xsd:element name="nom" type="xsd:string"/>
+                <xsd:element name="prenom" type="xsd:string"/>
+                <xsd:element name="date_nais" type="xsd:string"/>
+                <xsd:element name="lieu_nais" type="xsd:string"/>
+                <xsd:element name="commune" type="xsd:string"/>
+                <xsd:element name="quartier" type="xsd:string"/>
+                <xsd:element name="telephone" type="xsd:string"/>
+                <xsd:element name="mail" type="xsd:string"/>
+                <xsd:element name="code_profile" type="xsd:integer"/>
+                <xsd:element name="nom_bureau" type="xsd:string"/>
+                <xsd:element name="nom_centre" type="xsd:string"/>
+            </xsd:all>
+        </xsd:complexType>     
+    </types>
+    
+    <message name="getCompteByLoginRequest">
+        <part name="login" type="xsd:string"/>
+    </message>
+    <message name="getCompteByLoginResponse">
+        <part name="return" type="tns:Compte"/>
+    </message>
+
+    <message name="connecterCompteRequest">
+        <part name="login" type="xsd:string"/>
+        <part name="password" type="xsd:string"/>
+    </message>
+    <message name="connecterCompteResponse">
+        <part name="return" type="xsd:boolean"/>
+    </message>        
+    
+    <message name="ajouterCompteRequest">
+        <part name="login" type="xsd:string"/>
+        <part name="password" type="xsd:string"/>
+        <part name="num_cni" type="xsd:string"/>
+    </message>
+    <message name="ajouterCompteResponse">
+        <part name="return" type="xsd:boolean"/>
+    </message>
+
+    <message name="verifierDoubleInscriptionRequest">
+        <part name="login" type="xsd:string"/>
+        <part name="num_cni" type="xsd:string"/>
+    </message>
+    <message name="verifierDoubleInscriptionResponse">
+        <part name="return" type="xsd:boolean"/>
+    </message>
+
+    <message name="verifierInscriptionRequest">
+        <part name="login" type="xsd:string"/>
+        <part name="num_cni" type="xsd:string"/>
+    </message>
+    <message name="verifierInscriptionResponse">
+        <part name="return" type="xsd:integer"/>
+    </message>
+
+    <message name="getElecteurByCniRequest">
+        <part name="num_cni" type="xsd:string"/>
+    </message>
+    <message name="getElecteurByCniResponse">
+        <part name="return" type="tns:Electeur"/>
+    </message>
+
+    <message name="ajouterElecteurRequest">
+        <part name="num_cni" type="xsd:string"/>
+        <part name="nom" type="xsd:string"/>
+        <part name="prenom" type="xsd:string"/>
+        <part name="date_nais" type="xsd:string"/>
+        <part name="lieu_nais" type="xsd:string"/>
+        <part name="commune" type="xsd:string"/>
+        <part name="quartier" type="xsd:string"/>
+        <part name="telephone" type="xsd:string"/>
+        <part name="mail" type="xsd:string"/>
+    </message>
+    <message name="ajouterElecteurResponse">
+        <part name="return" type="xsd:boolean"/>
+    </message>
+
+    <portType name="serviceInscriptionElecteurPortType">
+	   <operation name="getCompteByLogin">
+            <documentation>Choper un Compte à partir de son login </documentation>
+            <input message="tns:getCompteByLoginRequest"/>
+	       <output message="tns:getCompteByLoginResponse"/>
+	   </operation>
+	   <operation name="connecterCompte">
+            <documentation>Se connecter au Compte via un login et un mot de passe</documentation>
+            <input message="tns:connecterCompteRequest"/>
+            <output message="tns:connecterCompteResponse"/>
+	   </operation>
+        <operation name="ajouterCompte">
+            <documentation>Ajouter un compte</documentation>
+            <input message="tns:ajouterCompteRequest"/>
+            <output message="tns:ajouterCompteResponse"/>
+	   </operation>
+        <operation name="verifierDoubleInscription">
+            <documentation>Verifier s'il y a double inscription</documentation>
+            <input message="tns:verifierDoubleInscriptionRequest"/>
+            <output message="tns:verifierDoubleInscriptionResponse"/>
+       </operation>
+        <operation name="verifierInscription">
+            <documentation>Vérifier l'état d'avancement de l'inscription de l'élécteur(Inscription non finanliser, membre simple, electeur, candidat, moderateur ....)</documentation>
+            <input message="tns:verifierInscriptionRequest"/>
+            <output message="tns:verifierInscriptionResponse"/>
+       </operation>
+        <operation name="getElecteurByCni">
+            <documentation>Obtenir un electeur via son numéro de CNI</documentation>
+            <input message="tns:getElecteurByCniRequest"/>
+            <output message="tns:getElecteurByCniResponse"/>
+       </operation>
+        <operation name="ajouterElecteur">
+            <documentation>Ajouter un electeur</documentation>
+            <input message="tns:ajouterElecteurRequest"/>
+            <output message="tns:ajouterElecteurResponse"/>
+       </operation>
+
+    </portType>
+    
+    <binding name="serviceInscriptionElecteurBinding" type="tns:serviceInscriptionElecteurPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        
+        <operation name="getCompteByLogin">
+            <soap:operation soapAction="urn:serviceInscriptionElecteurwsdl#getCompteByLoginServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:serviceInscriptionElecteurwsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:serviceInscriptionElecteurwsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+	   </operation>
+        
+        <operation name="connecterCompte">
+            <soap:operation soapAction="urn:serviceInscriptionElecteurwsdl#connecterCompteServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:serviceInscriptionElecteurwsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:serviceInscriptionElecteurwsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+	   </operation>
+        
+        <operation name="ajouterCompte">
+            <soap:operation soapAction="urn:serviceInscriptionElecteurwsdl#ajouterCompteServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:serviceInscriptionElecteurwsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:serviceInscriptionElecteurwsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+	   </operation> 
+
+        <operation name="verifierDoubleInscription">
+            <soap:operation soapAction="urn:serviceInscriptionElecteurwsdl#verifierDoubleInscriptionServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:serviceInscriptionElecteurwsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:serviceInscriptionElecteurwsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+       </operation> 
+
+        <operation name="verifierInscription">
+            <soap:operation soapAction="urn:serviceInscriptionElecteurwsdl#verifierInscriptionServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:serviceInscriptionElecteurwsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:serviceInscriptionElecteurwsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+       </operation> 
+
+               <operation name="getElecteurByCni">
+            <soap:operation soapAction="urn:serviceInscriptionElecteurwsdl#getElecteurByCniServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:serviceInscriptionElecteurwsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:serviceInscriptionElecteurwsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+       </operation> 
+
+        <operation name="ajouterElecteur">
+            <soap:operation soapAction="urn:serviceInscriptionElecteurwsdl#ajouterElecteurServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:serviceInscriptionElecteurwsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:serviceInscriptionElecteurwsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+       </operation>        
+    </binding>
+    
+    <service name="serviceCompte">
+        <port name="serviceComptePort" binding="tns:serviceInscriptionElecteurBinding">
+            <soap:address location="http://localhost/sges/ws_inscription_electeur.php"/>
+        </port>
+    </service>
+    
+</definitions>

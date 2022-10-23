@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+ 
+<definitions
+   xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+   xmlns="http://schemas.xmlsoap.org/wsdl/"
+   
+   targetNamespace="urn:serviceChangerBureauDeVotewsdl"
+   xmlns:tns="urn:serviceChangerBureauDeVotewsdl"
+      
+>
+    <types>
+        <xsd:schema targetNamespace="urn:serviceChangerBureauDeVotewsdl"/>
+        <xsd:schema namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <xsd:import namespace="http://schemas.xmlsoap.org/wsdl"/>
+     
+        <xsd:complexType name="Electeur">
+            <xsd:all>
+                <xsd:element name="num_cni" type="xsd:string"/>
+                <xsd:element name="nom" type="xsd:string"/>
+                <xsd:element name="prenom" type="xsd:string"/>
+                <xsd:element name="date_nais" type="xsd:string"/>
+                <xsd:element name="lieu_nais" type="xsd:string"/>
+                <xsd:element name="commune" type="xsd:string"/>
+                <xsd:element name="quartier" type="xsd:string"/>
+                <xsd:element name="telephone" type="xsd:string"/>
+                <xsd:element name="mail" type="xsd:string"/>
+                <xsd:element name="code_profile" type="xsd:integer"/>
+                <xsd:element name="nom_bureau" type="xsd:string"/>
+                <xsd:element name="nom_centre" type="xsd:string"/>
+            </xsd:all>
+        </xsd:complexType>     
+    </types>
+    
+    <message name="changementAutomatiqueBureauRequest">
+        <part name="num_cni" type="xsd:string"/>
+    </message>
+    <message name="changementAutomatiqueBureauResponse">
+        <part name="return" type="xsd:integer"/>
+    </message>
+
+    <message name="changementManuelBureauRequest">
+        <part name="num_cni" type="xsd:string"/>
+        <part name="nom_bureau" type="xsd:string"/>
+        <part name="nom_centre" type="xsd:string"/>
+    </message>
+    <message name="changementManuelBureauResponse">
+        <part name="return" type="xsd:string"/>
+    </message>        
+    
+    <message name="demanderChangementBureauRequest">
+        <part name="num_cni" type="xsd:string"/>
+    </message>
+    <message name="demanderChangementBureauResponse">
+        <part name="return" type="xsd:boolean"/>
+    </message>  
+
+
+    <portType name="serviceInscriptionElecteurPortType">
+      
+       <operation name="changementAutomatiqueBureau">
+            <documentation>Affecter automatiquement un bureau de vote à un élécteur en fonction de son lieu de résidence </documentation>
+            <input message="tns:changementAutomatiqueBureauRequest"/>
+           <output message="tns:changementAutomatiqueBureauResponse"/>
+       </operation>
+       <operation name="changementManuelBureau">
+            <documentation>Affecter manuelement un bureau de vote </documentation>
+            <input message="tns:changementManuelBureauRequest"/>
+            <output message="tns:changementManuelBureauResponse"/>
+        </operation>
+       <operation name="demanderChangementBureau">
+            <documentation>Demander aux modérateurs de changer son bureaux via message mail. </documentation>
+            <input message="tns:changementManuelBureauRequest"/>
+            <output message="tns:changementManuelBureauResponse"/>
+       </operation>
+
+
+    </portType>
+    
+    <binding name="serviceChangerBureauDeVoteBinding" type="tns:serviceInscriptionElecteurPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        
+        <operation name="changementAutomatiqueBureau">
+            <soap:operation soapAction="urn:serviceChangerBureauDeVotewsdl#changementAutomatiqueBureauServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:serviceChangerBureauDeVotewsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:serviceChangerBureauDeVotewsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+       </operation>
+        
+        <operation name="changementManuelBureau">
+            <soap:operation soapAction="urn:serviceChangerBureauDeVotewsdl#changementManuelBureauServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:serviceChangerBureauDeVotewsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:serviceChangerBureauDeVotewsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+       </operation>
+        
+        <operation name="demanderChangementBureau">
+            <soap:operation soapAction="urn:serviceChangerBureauDeVotewsdl#demanderChangementBureauServeur" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:serviceChangerBureauDeVotewsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:serviceChangerBureauDeVotewsdl" 
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+       </operation> 
+    </binding>
+    
+    <service name="serviceChangerBureauDeVote">
+        <port name="serviceChangerBureauDeVotePort" binding="tns:serviceChangerBureauDeVoteBinding">
+            <soap:address location="http://localhost/sges/ws_changer_bureau_de_vote.php"/>
+        </port>
+    </service>
+    
+</definitions>
